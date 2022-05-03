@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.88.1">
+  <link rel="icon" type="image/x-icon" href="/img/gdRojo.ico">
+  <title>Grupo Dumas</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+
+  <!-- Custom styles for this template -->
+  <link href="css/dashboard.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3">Grupo Dumas</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <h2 style="color:white;">Bienvenido:
+      <% if(user) { %>
+        <span class="badge">
+          <%= user.nombre %>
+        </span>
+        <% } %>
+    </h2>
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="nav-link px-3" href="/logout">Cerrar Sesión</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+          <% if(user.id_rol==1){ %>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/">
+                  <span></span>
+                  Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/Usuarios">
+                  <span></span>
+                  Usuarios
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="/Clientes">
+                  <span></span>
+                  Clientes
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/Lineas">
+                  <span data-feather="users"></span>
+                  Líneas
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/Tipologias">
+                  <span data-feather="bar-chart-2"></span>
+                  Tipologías
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/Beneficios">
+                  <span data-feather="layers"></span>
+                  Beneficios
+                </a>
+              </li>
+            </ul>
+            <% } else{%>
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="/">
+                    <span></span>
+                    Dashboard
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="/Clientes">
+                    <span></span>
+                    Clientes
+                  </a>
+                </li>
+              </ul>
+              <% } %>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Clientes</h1>
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <a href="/crearCliente %>" class="btn btn-primary">Crear Nuevo</a>
+          </div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Dni</th>
+              <th scope="col">Telefono</th>
+              <th scope="col">Email</th>
+              <th scope="col">Activo</th>
+              <th scope="col">Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% clientes.map((cliente)=> { %>
+              <tr>
+                <th scope="row">
+                  <%= cliente.id_cliente %>
+                </th>
+                <td>
+                  <%= cliente.nombre %>
+                </td>
+                <td>
+                  <%= cliente.dni %>
+                </td>
+                <td>
+                  <%= cliente.telefono %>
+                </td>
+                <td>
+                  <%= cliente.email %>
+                </td>
+                <td>
+                  <% if(cliente.activo==1){%>
+                    Si
+                    <% }else{%>
+                      No
+                      <% }%>
+                </td>
+                <td>
+                  <div class="btn-group " role="group" aria-label="Basic example">
+                    <% if(cliente.id_contrato==null){ %>
+                      <a href="/crearContrato/<%= cliente.id_cliente %>" class="btn btn-primary">Crear contrato</a>
+                    <% } else { %>
+                      <a href="/verContrato/<%= cliente.id_cliente %>" class="btn btn-primary">Ver contrato</a>
+                    <% } %>
+                    <% if(user.id_rol==1){ %>
+                      <a href="/editarCliente/<%= cliente.id_cliente %>" class="btn btn-primary">Editar</a>
+                      <% if(cliente.activo==1){ %>
+                        <a href="/borrarCliente/<%= cliente.id_cliente %>" class="btn btn-primary">Dar De Baja</a>
+                      <% }else{ %>
+                        <a href="/borrarCliente/<%= cliente.id_cliente %>" class="btn btn-primary">Dar De Alta</a>
+                      <% }%>
+                    <% } else { %>
+                      <a href="/editarCliente/<%= cliente.id_cliente %>" class="btn btn-primary">Ver
+                        Cliente</a>
+                    <% } %>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+          </tbody>
+        </table>
+        <!--
+
+        -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <% if(pagina> 1) { %>
+              <li class="page-item"><a class="page-link" href="/Clientes?pagina=<%=pagina-1%>">Anterior</a></li>
+              <%}%>
+                <% for(let i=iterador; i<=finalLink; i++) { %>
+                  <% if(i===pagina) { %>
+                    <li class="page-item"><a class="page-link selectedLink" href="/Clientes?pagina=<%=i%>">
+                        <%=i%>
+                      </a></li>
+                    <% continue; %>
+                      <%}%>
+                        <li class="page-item"><a class="page-link" href="/Clientes?pagina=<%=i%>">
+                            <%=i%>
+                          </a></li>
+                        <% } %>
+
+                          <% if(pagina < nDePaginas){ %> <a class="page-link"
+                              href="/Clientes?pagina=<%=pagina+1%>">Siguiente</a>
+                            <%}%>
+          </ul>
+        </nav>
+      </main>
+    </div>
+  </div>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+    integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+    crossorigin="anonymous"></script>
+  <script src="dashboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <% if(alert){ %>
+    <script>
+      Swal.fire({
+        title: '<%= alertTitle %>',
+        text: '<%= alertMessage %>',
+        icon: '<%= alertIcon %>',
+        showCloseButton: <%= showConfirmButton %>,
+        timer: <%= timer %>
+        }).then(() => {
+          window.location = '/<%= ruta %>'
+        })
+    </script>
+
+    <% } %>
+
+</body>
+
+</html>
